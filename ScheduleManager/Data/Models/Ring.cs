@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScheduleManager.Data.Models;
 
-public class Ring
+public class Ring : Entity, IComparable<Ring>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     [Required]
     [DisplayName("Ring Number")]
     public byte Number { get; set; }
@@ -15,4 +13,6 @@ public class Ring
     [DisplayName("Ring Time")]
     [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
     public TimeOnly Time { get; set; }
+
+    public int CompareTo(Ring? other) => Time.CompareTo(other?.Time);
 }

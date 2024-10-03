@@ -5,10 +5,8 @@ using ScheduleManager.Data.Enums;
 namespace ScheduleManager.Data.Models;
 
 [DisplayColumn(nameof(Title))]
-public class Assignment : IComparable<Assignment>
+public class Assignment : Entity, IComparable<Assignment>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     [Required]
     [DisplayName("Title")]
     public string Title { get; set; } = null!;

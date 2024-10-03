@@ -5,10 +5,8 @@ using ScheduleManager.Data.Enums;
 namespace ScheduleManager.Data.Models;
 
 [DisplayColumn(nameof(Discipline))]
-public class Lesson
+public class Lesson : Entity, IComparable<Lesson>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     [Required]
     [DisplayName("Day of Week")]
     public DayOfWeek Day { get; set; }
@@ -32,4 +30,6 @@ public class Lesson
 
     [DisplayName("Teacher")]
     public string? Teacher { get; set; }
+
+    public int CompareTo(Lesson? other) => Id.CompareTo(other?.Id);
 }
