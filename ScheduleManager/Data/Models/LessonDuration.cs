@@ -6,7 +6,8 @@ namespace ScheduleManager.Data.Models;
 
 public class LessonDuration
 {
-    [Key]
+    public Guid Id { get; set; } = Guid.NewGuid();
+
     [Required]
     [DisplayName("Lesson Type")]
     public LessonType LessonType { get; set; }
