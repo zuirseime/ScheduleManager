@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data;
 using ScheduleManager.Data.Models;
+using ScheduleManager.Data.Repositories;
 using ScheduleManager.Services;
-using ScheduleManager.Services.Assignments;
 
 namespace ScheduleManager;
 
@@ -22,9 +22,11 @@ public class Program
         builder.Services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ScheduleContext>().AddDefaultTokenProviders();
 
-        builder.Services.AddScoped<IRepositoryService<Assignment>, AssignmentRepositoryService>();
-        builder.Services.AddScoped<IQueryService<Assignment>, AssignmentQueryService>();
-        builder.Services.AddScoped<IValidationService<Assignment>, AssignmentValidationService>();
+        AddScopes<Assignment, AssignmentRepository, AssignmentValidationService>(builder.Services);
+        AddScopes<Lesson, LessonRepository, LessonValidationService>(builder.Services);
+        AddScopes<Discipline, DisciplineRepository, DisciplineValidationService>(builder.Services);
+        AddScopes<LessonDuration, LessonDurationRepository, ValidationService<LessonDuration>>(builder.Services);
+        AddScopes<Ring, RingRepository, ValidationService<Ring>>(builder.Services);
 
         var app = builder.Build();
 
@@ -48,5 +50,16 @@ public class Program
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
         app.Run();
+    }
+
+    private static void AddScopes<T, R, V>(IServiceCollection services) 
+        where T : Entity
+        where R : Repository<T>
+        where V : ValidationService<T>
+    {
+        services.AddScoped<Repository<T>, R>();
+        services.AddScoped<IRepositoryService<T>, RepositoryService<T>>();
+        services.AddScoped<IQueryService<T>, QueryService<T>>();
+        services.AddScoped<IValidationService<T>, V>();
     }
 }

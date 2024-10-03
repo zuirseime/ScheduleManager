@@ -1,11 +1,11 @@
 ﻿using ScheduleManager.Data.Models;
 using ScheduleManager.Data.Repositories;
 
-namespace ScheduleManager.Services.Assignments;
+namespace ScheduleManager.Services;
 
-public class AssignmentValidationService(Repository<Assignment> repository) : IValidationService<Assignment>
+public class AssignmentValidationService(Repository<Assignment> repository) : ValidationService<Assignment>(repository)
 {
-    public async Task<bool> ValidateAsync(Assignment entity)
+    public async override Task<bool> ValidateAsync(Assignment entity)
     {
         var assignments = await repository.GetAllAsync();
 

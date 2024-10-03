@@ -2,7 +2,7 @@
 
 public interface IQueryService<T> where T : class
 {
-    public Task<IEnumerable<T>> Sort(IEnumerable<T> entities);
-    public Task<IEnumerable<T>> Filter(IEnumerable<T> entities, Func<T, bool> predicate);
-    public Task<IEnumerable<T>> Find(IEnumerable<T> entities, string query);
+    public Task<IEnumerable<T>> Sort();
+    public Task<IEnumerable<T>> Filter(Func<T, bool> predicate);
+    public Task<IEnumerable<T>> Find(string query);
 }
