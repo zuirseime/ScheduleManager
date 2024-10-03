@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ScheduleManager.Data;
+
 namespace ScheduleManager;
 
 public class Program
@@ -8,6 +12,12 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddDbContext<ScheduleContext>(options 
+            => options.UseNpgsql(builder.Configuration.GetConnectionString("Dev")));
+
+        builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<ScheduleContext>().AddDefaultTokenProviders();
 
         var app = builder.Build();
 
