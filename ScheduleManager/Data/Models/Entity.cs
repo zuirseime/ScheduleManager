@@ -1,6 +1,6 @@
 ﻿namespace ScheduleManager.Data.Models;
 
-public class Entity
+public abstract class Entity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 }
