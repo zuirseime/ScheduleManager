@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data;
+using ScheduleManager.Data.Models;
+using ScheduleManager.Services;
+using ScheduleManager.Services.Assignments;
 
 namespace ScheduleManager;
 
@@ -18,6 +21,10 @@ public class Program
 
         builder.Services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ScheduleContext>().AddDefaultTokenProviders();
+
+        builder.Services.AddScoped<IRepositoryService<Assignment>, AssignmentRepositoryService>();
+        builder.Services.AddScoped<IQueryService<Assignment>, AssignmentQueryService>();
+        builder.Services.AddScoped<IValidationService<Assignment>, AssignmentValidationService>();
 
         var app = builder.Build();
 
