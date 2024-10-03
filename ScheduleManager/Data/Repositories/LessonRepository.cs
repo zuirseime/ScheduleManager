@@ -11,7 +11,7 @@ public class LessonRepository(ScheduleContext context) : Repository<Lesson>(cont
     public override async Task<Lesson?> GetByIdAsync(Guid id)
         => (await GetAllAsync()).FirstOrDefault(a => a.Id == id);
 
-    public override async Task CreateSync(Lesson entity)
+    public override async Task CreateAsync(Lesson entity)
     {
         await context.Lessons.AddAsync(entity);
         await SaveChangesAsync();

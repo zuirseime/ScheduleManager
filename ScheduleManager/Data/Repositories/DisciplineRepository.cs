@@ -11,7 +11,7 @@ public class DisciplineRepository(ScheduleContext context) : Repository<Discipli
     public override async Task<Discipline?> GetByIdAsync(Guid id)
         => (await GetAllAsync()).FirstOrDefault(a => a.Id == id);
 
-    public override async Task CreateSync(Discipline entity)
+    public override async Task CreateAsync(Discipline entity)
     {
         await context.Disciplines.AddAsync(entity);
         await SaveChangesAsync();

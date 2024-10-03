@@ -11,7 +11,7 @@ public class RingRepository(ScheduleContext context) : Repository<Ring>(context)
     public override async Task<Ring?> GetByIdAsync(Guid id)
         => (await GetAllAsync()).FirstOrDefault(a => a.Id == id);
 
-    public override async Task CreateSync(Ring entity)
+    public override async Task CreateAsync(Ring entity)
     {
         await context.Rings.AddAsync(entity);
         await SaveChangesAsync();

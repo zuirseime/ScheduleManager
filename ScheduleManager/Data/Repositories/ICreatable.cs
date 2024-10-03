@@ -2,5 +2,5 @@
 
 public interface ICreatable<T> where T : class
 {
-    public Task CreateSync(T entity);
+    public Task CreateAsync(T entity);
 }

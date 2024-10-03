@@ -1,6 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using ScheduleManager.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data.Models;
 
 namespace ScheduleManager.Data.Repositories;
@@ -13,7 +11,7 @@ public class AssignmentRepository(ScheduleContext context) : Repository<Assignme
     public override async Task<Assignment?> GetByIdAsync(Guid id)
         => (await GetAllAsync()).FirstOrDefault(a => a.Id == id);
 
-    public override async Task CreateSync(Assignment entity)
+    public override async Task CreateAsync(Assignment entity)
     {
         await context.Assignments.AddAsync(entity);
         await SaveChangesAsync();
