@@ -4,9 +4,8 @@ using ScheduleManager.Data.Enums;
 
 namespace ScheduleManager.Data.Models;
 
-public class LessonDuration
+public class LessonDuration : Entity, IComparable<LessonDuration>
 {
-    [Key]
     [Required]
     [DisplayName("Lesson Type")]
     public LessonType LessonType { get; set; }
@@ -15,4 +14,6 @@ public class LessonDuration
     [DisplayName("Lesson Duration")]
     [DisplayFormat(DataFormatString = "{0:HH\\:mm}", ApplyFormatInEditMode = true)]
     public TimeSpan Duration { get; set; }
+
+    public int CompareTo(LessonDuration? other) => Duration.CompareTo(other?.Duration);
 }
