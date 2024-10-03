@@ -25,8 +25,8 @@ public class Program
         AddScopes<Assignment, AssignmentRepository, AssignmentValidationService>(builder.Services);
         AddScopes<Lesson, LessonRepository, LessonValidationService>(builder.Services);
         AddScopes<Discipline, DisciplineRepository, DisciplineValidationService>(builder.Services);
-        AddScopes<LessonDuration, LessonDurationRepository, ValidationService<LessonDuration>>(builder.Services);
-        AddScopes<Ring, RingRepository, ValidationService<Ring>>(builder.Services);
+        AddScopes<LessonDuration, LessonDurationRepository, LessonDurationValidationService>(builder.Services);
+        AddScopes<Ring, RingRepository, RingValidationService>(builder.Services);
 
         var app = builder.Build();
 

@@ -3,7 +3,8 @@ using ScheduleManager.Data.Repositories;
 
 namespace ScheduleManager.Services;
 
-public class AssignmentValidationService(Repository<Assignment> repository) : ValidationService<Assignment>(repository)
+public class AssignmentValidationService(Repository<Assignment> repository) 
+    : ValidationService<Assignment>(repository)
 {
     public async override Task<bool> ValidateAsync(Assignment entity)
     {
