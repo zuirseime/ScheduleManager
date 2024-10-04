@@ -14,19 +14,16 @@ public class UserRepositoryService(UserManager<IdentityUser> manager)
     public async Task<IdentityUser?> GetByIdAsync(string id) 
         => await manager.FindByIdAsync(id);
 
-    public async Task CreateAsync(IdentityUser entity, string password) 
+    public async Task<IdentityResult> CreateAsync(IdentityUser entity, string password) 
         => await manager.CreateAsync(entity, password);
 
-    public async Task UpdateAsync(IdentityUser entity)
-    {
-        await manager.UpdateAsync(entity);
-    }
+    public async Task<IdentityResult> UpdateAsync(IdentityUser entity) => await manager.UpdateAsync(entity);
 
-    public async Task DeleteAsync(string id)
+    public async Task<IdentityResult?> DeleteAsync(string id)
     {
         var user = await manager.FindByIdAsync(id);
+        if (user is null) return null;
 
-        if (user is not null)
-            await manager.DeleteAsync(user);
+        return await manager.DeleteAsync(user);
     }
 }
