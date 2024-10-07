@@ -10,7 +10,7 @@ public class DisciplineValidationService(Repository<Discipline> repository)
     {
         var assignments = await repository.GetAllAsync();
 
-        if (assignments.Any(a => a.Name == entity.Name))
+        if (assignments.Any(a => a.UserId == entity.UserId && a.Name == entity.Name))
             throw new InvalidOperationException("Discipline with the same name already exists.");
 
         return true;

@@ -10,7 +10,7 @@ public class AssignmentValidationService(Repository<Assignment> repository)
     {
         var assignments = await repository.GetAllAsync();
 
-        if (assignments.Any(a => a.Title == entity.Title && a.DisciplineId == entity.DisciplineId))
+        if (assignments.Any(a => a.UserId == entity.UserId && a.Title == entity.Title && a.DisciplineId == entity.DisciplineId))
             throw new InvalidOperationException("Assignment with the same name already exists.");
 
         return true;

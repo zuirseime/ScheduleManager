@@ -10,7 +10,7 @@ public class LessonDurationValidationService(Repository<LessonDuration> reposito
     {
         var assignments = await repository.GetAllAsync();
 
-        if (assignments.Any(a => a.LessonType == entity.LessonType))
+        if (assignments.Any(a => a.UserId == entity.UserId && a.LessonType == entity.LessonType))
             throw new InvalidOperationException("Lesson type already exists.");
 
         return true;

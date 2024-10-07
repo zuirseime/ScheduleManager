@@ -10,7 +10,7 @@ public class RingValidationService(Repository<Ring> repository)
     {
         var assignments = await repository.GetAllAsync();
 
-        if (assignments.Any(a => a.Number == entity.Number))
+        if (assignments.Any(a => a.UserId == entity.UserId && a.Number == entity.Number))
             throw new InvalidOperationException("Lesson number already taken.");
 
         return true;
