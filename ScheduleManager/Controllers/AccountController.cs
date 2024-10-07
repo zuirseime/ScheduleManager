@@ -8,11 +8,12 @@ namespace ScheduleManager.Controllers;
 [Route("account/")]
 public class AccountController(UserRepositoryService repositoryService,
                             IQueryService<IdentityUser> queryService,
-                            SignInManager<IdentityUser> signInManager) : Controller
+                            SignInManager<IdentityUser> signInManager,
+                            UserManager<IdentityUser> userManager) : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        return View(await userManager.GetUserAsync(User));
     }
 
 
@@ -39,7 +40,7 @@ public class AccountController(UserRepositoryService repositoryService,
             if (result.Succeeded)
             {
                 await signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction(nameof(HomeController.Index), nameof(HomeController));
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
 
             foreach (var error in result.Errors)
@@ -69,7 +70,7 @@ public class AccountController(UserRepositoryService repositoryService,
                 var result = await signInManager.PasswordSignInAsync(user.UserName!, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
-                    return RedirectToAction(nameof(HomeController.Index), nameof(HomeController));
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -83,6 +84,6 @@ public class AccountController(UserRepositoryService repositoryService,
     public async Task<IActionResult> Logout()
     {
         await signInManager.SignOutAsync();
-        return RedirectToAction(nameof(HomeController.Index), nameof(HomeController));
+        return RedirectToAction(nameof(HomeController.Index), "Home");
     }
 }
