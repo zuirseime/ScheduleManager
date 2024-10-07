@@ -19,12 +19,20 @@ public class Program
         builder.Services.AddDbContext<ScheduleContext>(options 
             => options.UseNpgsql(builder.Configuration.GetConnectionString("Dev")));
 
-        builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
-            .AddEntityFrameworkStores<ScheduleContext>().AddUserValidator<UserValidationService>();
+        builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            options.User.RequireUniqueEmail = true;
+        }).AddDefaultTokenProviders().AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<ScheduleContext>();
 
         builder.Services.AddScoped<Repository<IdentityUser>, UserRepository>();
         builder.Services.AddScoped<UserRepositoryService>();
         builder.Services.AddScoped<IQueryService<IdentityUser>, QueryService<IdentityUser>>();
+
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            options.Password.RequireUppercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+        });
 
         AddScopes<Assignment, AssignmentRepository, AssignmentValidationService>(builder.Services);
         AddScopes<Lesson, LessonRepository, LessonValidationService>(builder.Services);

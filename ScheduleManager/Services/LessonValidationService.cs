@@ -10,7 +10,7 @@ public class LessonValidationService(Repository<Lesson> repository)
     {
         var assignments = await repository.GetAllAsync();
 
-        if (assignments.Any(a => a.Day == entity.Day && a.LessonNumber == entity.LessonNumber))
+        if (assignments.Any(a => a.UserId == entity.UserId && a.Day == entity.Day && a.LessonNumber == entity.LessonNumber))
             throw new InvalidOperationException($"Lesson with the same number already exists in {entity.Day}.");
 
         return true;
