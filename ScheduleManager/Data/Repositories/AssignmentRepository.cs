@@ -28,4 +28,6 @@ public class AssignmentRepository(ScheduleContext context) : Repository<Assignme
         context.Assignments.Remove(entity);
         await SaveChangesAsync();
     }
+
+    public override async Task<IEnumerable<Assignment>> GetAllAsync(Func<Assignment, bool> predicate) => (await context.Assignments.ToListAsync()).Where(predicate);
 }

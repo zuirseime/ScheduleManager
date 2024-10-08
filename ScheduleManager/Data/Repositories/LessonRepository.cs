@@ -28,4 +28,5 @@ public class LessonRepository(ScheduleContext context) : Repository<Lesson>(cont
         context.Lessons.Remove(entity);
         await SaveChangesAsync();
     }
+    public override async Task<IEnumerable<Lesson>> GetAllAsync(Func<Lesson, bool> predicate) => (await context.Lessons.ToListAsync()).Where(predicate);
 }

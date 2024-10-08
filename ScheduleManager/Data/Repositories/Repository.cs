@@ -4,6 +4,7 @@ namespace ScheduleManager.Data.Repositories;
 public abstract class Repository<T>(ScheduleContext context) : ICreatable<T>, IReadable<T>, IUpdatable<T>, IDeletable<T> where T : class
 {
     public abstract Task<IEnumerable<T>> GetAllAsync();
+    public abstract Task<IEnumerable<T>> GetAllAsync(Func<T, bool> predicate);
     public abstract Task<T?> GetByIdAsync(Guid id);
     public abstract Task CreateAsync(T entity);
     public abstract Task UpdateAsync(T entity);

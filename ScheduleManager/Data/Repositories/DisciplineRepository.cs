@@ -28,4 +28,6 @@ public class DisciplineRepository(ScheduleContext context) : Repository<Discipli
         context.Disciplines.Remove(entity);
         await SaveChangesAsync();
     }
+
+    public override async Task<IEnumerable<Discipline>> GetAllAsync(Func<Discipline, bool> predicate) => (await context.Disciplines.ToListAsync()).Where(predicate);
 }
