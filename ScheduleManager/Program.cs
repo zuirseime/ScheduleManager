@@ -24,9 +24,8 @@ public class Program
         }).AddDefaultTokenProviders().AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ScheduleContext>();
 
-        builder.Services.AddScoped<Repository<IdentityUser>, UserRepository>();
+        builder.Services.AddScoped<UserRepository>();
         builder.Services.AddScoped<UserRepositoryService>();
-        builder.Services.AddScoped<IQueryService<IdentityUser>, QueryService<IdentityUser>>();
 
         builder.Services.Configure<IdentityOptions>(options =>
         {
