@@ -2,7 +2,7 @@
 
 public interface IQueryService<T> where T : class
 {
-    public Task<IEnumerable<T>> Sort();
+    public void Sort(IEnumerable<T> values);
     public Task<IEnumerable<T>> Filter(Func<T, bool> predicate);
     public Task<IEnumerable<T>> Find(string query);
 }

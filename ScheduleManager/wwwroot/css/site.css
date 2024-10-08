@@ -20,3 +20,138 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.sticky-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 2px 5px -3px, rgba(0, 0, 0, 0.2) 0px -2px 0px inset;
+}
+
+.sticky-header {
+    position: sticky;
+    background: white;
+    top: 0;
+    padding: 10px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 2px 1px;
+}
+
+.schedule-container {
+    background-size: 100% 60px;
+    background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom, grey 1px, transparent 1px);
+    position: relative;
+}
+
+.hours {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    border-right: grey 1px solid;
+    border-bottom: grey 1px solid;
+}
+
+.hour-block {
+    height: 60px;
+    line-height: 60px;
+}
+
+.hour-text {
+    height: 60px;
+    border-right: 1px solid gray;
+    text-align: right;
+    padding-right: 5px;
+    width: 25%;
+}
+
+.lessons {
+    position: absolute;
+    left: 30%;
+    top: 0;
+    width: 65%;
+}
+
+.lesson-block-bg {
+    margin-top: 1px;
+    background: white;
+    position: absolute;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.lesson-block {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: black;
+    --bs-bg-opacity: .75;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+    .lesson-block:hover {
+        --bs-bg-opacity: 1;
+        color: white;
+    }
+
+    .lesson-block span {
+    }
+
+    .lesson-block:hover span {
+        --bs-bg-opacity: .75;
+    }
+
+.now {
+    position: absolute;
+    z-index: 500;
+    left: 25%;
+    width: 75%;
+}
+
+.now-circle {
+    position: absolute;
+    margin-top: -4px;
+    margin-left: -5.5px;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background: var(--bs-danger);
+}
+
+.now-line {
+    position: absolute;
+    background: var(--bs-danger);
+    left: 0;
+    right: 0;
+    height: 2px;
+}
+
+.trow {
+    height: 100%;
+    cursor: pointer;
+    padding: 5px;
+}
+
+    .trow a {
+        text-decoration: none;
+    }
+
+    .trow:hover {
+        font-size: 105%;
+        box-shadow: rgba(17, 17, 26, 0.1) 0px 5px 5px;
+    }
+
+.table {
+    margin-top: -5px;
+}

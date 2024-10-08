@@ -1,34 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
+using System.Security.Claims;
 
 namespace ScheduleManager.Data.Repositories;
 
-public class UserRepository(ScheduleContext context) : Repository<IdentityUser>(context)
+public class UserRepository(ScheduleContext context, UserManager<IdentityUser> manager) : Repository<IdentityUser>(context)
 {
     public override async Task<IEnumerable<IdentityUser>> GetAllAsync()
-        => await context.Users.ToListAsync();
-
-    public override async Task<IdentityUser?> GetByIdAsync(Guid id) 
-        => (await GetAllAsync()).FirstOrDefault(u => u.Id == id.ToString());
-
-    public override async Task CreateAsync(IdentityUser entity)
-    {
-        await context.Users.AddAsync(entity);
-        await SaveChangesAsync();
-    }
-
-    public override async Task UpdateAsync(IdentityUser entity)
-    {
-
-        context.Users.Update(entity);
-        await SaveChangesAsync();
-    }
-
-    public override async Task DeleteAsync(IdentityUser entity)
-    {
-
-        context.Users.Remove(entity);
-        await SaveChangesAsync();
-    }
-
+        => await manager.Users.ToListAsync();
+    public override async Task<IEnumerable<IdentityUser>> GetAllAsync(Func<IdentityUser, bool> predicate)
+        => (await manager.Users.ToListAsync()).Where(predicate);
+    public override async Task<IdentityUser?> GetByIdAsync(Guid id)
+        => await manager.FindByIdAsync(id.ToString());
+    public async Task<IdentityUser?> GetCurrent(ClaimsPrincipal user) => await manager.GetUserAsync(user);
+    public override async Task<IdentityResult?> CreateAsync(IdentityUser entity)
+        => await CreateAsync(entity, "password");
+    public async Task<IdentityResult?> CreateAsync(IdentityUser entity, string password)
+        => await manager.CreateAsync(entity, password);
+    public override async Task<IdentityResult?> UpdateAsync(IdentityUser entity) => await manager.UpdateAsync(entity);
+    public override async Task<IdentityResult?> DeleteAsync(IdentityUser entity) => await manager.DeleteAsync(entity);
 }

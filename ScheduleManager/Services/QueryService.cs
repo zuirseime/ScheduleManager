@@ -5,11 +5,10 @@ namespace ScheduleManager.Services;
 
 public class QueryService<T>(Repository<T> repository) : IQueryService<T> where T : class
 {
-    public async Task<IEnumerable<T>> Sort()
+    public void Sort(IEnumerable<T> values)
     {
-        var sorted = (await repository.GetAllAsync()).ToList();
+        var sorted = values.ToList();
         sorted.Sort();
-        return sorted;
     }
 
     public async Task<IEnumerable<T>> Find(string query)

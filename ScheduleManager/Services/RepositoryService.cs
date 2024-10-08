@@ -7,6 +7,7 @@ namespace ScheduleManager.Services;
 public class RepositoryService<T>(Repository<T> repository) : IRepositoryService<T> where T : Entity
 {
     public async Task<IEnumerable<T>> GetAllAsync() => await repository.GetAllAsync();
+    public async Task<IEnumerable<T>> GetAllAsync(Func<T, bool> predicate) => await repository.GetAllAsync(predicate);
 
     public async Task<T?> GetByIdAsync(Guid id) => await repository.GetByIdAsync(id);
 

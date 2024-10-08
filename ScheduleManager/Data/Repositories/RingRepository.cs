@@ -28,4 +28,6 @@ public class RingRepository(ScheduleContext context) : Repository<Ring>(context)
         context.Rings.Remove(entity);
         await SaveChangesAsync();
     }
+
+    public override async Task<IEnumerable<Ring>> GetAllAsync(Func<Ring, bool> predicate) => (await context.Rings.ToListAsync()).Where(predicate);
 }
