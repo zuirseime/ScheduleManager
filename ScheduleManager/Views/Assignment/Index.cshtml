@@ -1,0 +1,131 @@
+﻿@using ScheduleManager.Data.Enums
+
+@model IEnumerable<ScheduleManager.Data.Models.Assignment>
+
+@{
+    ViewData["Title"] = "Tasks";
+    float done = ViewBag.Amount.Item1;
+    float all = ViewBag.Amount.Item2;
+}
+
+<a asp-action="Create" asp-route-userId="@ViewBag.UserId" class="btn btn-primary sticky-button">
+    <i class="fa-solid fa-plus"></i>
+</a>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Filters</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body">
+        <form asp-action="Index" method="get">
+            <div class="form-group">
+                <label for="typeFilter">Assignment type</label>
+                <select class="form-control" name="type" id="typeFilter" data-selected="@ViewBag.Type">
+                    <option value="">Choose a type</option>
+                    <option value="@AssignmentType.Lab">Лабораторні</option>
+                    <option value="@AssignmentType.Module">Модулі</option>
+                    <option value="@AssignmentType.Calculation">Розрахункові</option>
+                    <option value="@AssignmentType.Practice">Практичні</option>
+                </select>
+            </div>
+            <div class="form-group my-2">
+                <label for="disciplineFilter">Discipline</label>
+                <select class="form-control" name="discipline" id="disciplineFilter" data-selected="@ViewBag.Discipline">
+                    @foreach (Discipline discipline in ViewBag.Disciplines)
+                    {
+                        <option value="@discipline.Id">@discipline.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group my-2">
+                <label for="doneFilter">Status</label>
+                <select class="form-control" name="done" id="doneFilter" data-selected="@ViewBag.Done">
+                    <option value="">Choose a status</option>
+                    <option value="True">Done</option>
+                    <option value="False">In process</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                </div>
+                <div class="col-auto">
+                    <button type="reset" class="btn btn-secondary mt-3">Revert</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="sticky-header mt-3 d-flex justify-content-between align-items-end">
+    <button class="px-3 btn btn-primary align-bottom" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Filters</button>
+
+    <div>
+        <div class="text-end">Виконано:</div>
+        <div class="text-end">Абсолютне значення: @done / @all</div>
+        <div class="text-end">Відносне значення: @(Math.Round(done / all * 100, 2))%</div>
+    </div>
+</div>
+
+<table class="table">
+    <tbody>
+        @foreach (var assignment in Model)
+        {
+            var rowClass = "";
+
+            if (assignment.IsDone)
+            {
+                rowClass = "table-success";
+            } else if (assignment.DueDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                rowClass = "table-danger";
+            } else if (assignment.DueDate < DateOnly.FromDateTime(DateTime.Now.AddDays(14)))
+            {
+                rowClass = "table-warning";
+            }
+            <tr class=" trow @rowClass">
+                <td>
+                    <a asp-action="Edit" asp-route-id="@assignment.Id" asp-route-userId="@ViewBag.UserId" class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-dark mb-1">@Html.DisplayFor(modelItem => assignment.Title)</div>
+
+                            <div class="row">
+                                <div class="col-auto">
+                                    <span class="badge bg-success">@Html.DisplayFor(modelItem => assignment.Type)</span>
+                                </div>
+                                <div class="col">
+                                    <span class="text-secondary small">@Html.DisplayFor(modelItem => assignment.Discipline!.Name)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-secondary">@Html.DisplayFor(modelItem => assignment.DueDate)</div>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const typeSelect = document.getElementById("typeFilter");
+        const selectedType = typeSelect.getAttribute("data-selected");
+        if (selectedType) {
+            typeSelect.value = selectedType;
+        }
+
+        const disciplineSelect = document.getElementById("disciplineFilter");
+        const selectedDiscipline = disciplineSelect.getAttribute("data-selected");
+        if (selectedDiscipline) {
+            disciplineSelect.value = selectedDiscipline;
+        }
+
+        const statusSelect = document.getElementById("doneFilter");
+        const selectedStatus = statusSelect.getAttribute("data-selected");
+        if (selectedStatus) {
+            statusSelect.value = selectedStatus;
+        }
+    });
+</script>
