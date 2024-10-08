@@ -7,13 +7,11 @@ namespace ScheduleManager.Controllers;
 
 [Route("account/")]
 public class AccountController(UserRepositoryService repositoryService,
-                            IQueryService<IdentityUser> queryService,
-                            SignInManager<IdentityUser> signInManager,
-                            UserManager<IdentityUser> userManager) : Controller
+                               SignInManager<IdentityUser> signInManager) : Controller
 {
     public async Task<IActionResult> Index()
     {
-        return View(await userManager.GetUserAsync(User));
+        return View(await repositoryService.GetCurrent(User));
     }
 
 
@@ -63,7 +61,7 @@ public class AccountController(UserRepositoryService repositoryService,
     {
         if (ModelState.IsValid)
         {
-            var user = (await queryService.Filter(u => u.Email == model.Email)).FirstOrDefault();
+            var user = (await repositoryService.GetAllAsync(u => u.Email == model.Email)).FirstOrDefault();
             
             if (user is not null)
             {
