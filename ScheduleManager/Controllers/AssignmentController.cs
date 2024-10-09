@@ -57,14 +57,13 @@ public class AssignmentController(IRepositoryService<Assignment> repositoryServi
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(string userId, Assignment assignment)
     {
-        if (ModelState.IsValid && await validationService.ValidateAsync(assignment))
-        {
-            await repositoryService.CreateAsync(assignment);
-            return RedirectToAction(nameof(Index), new { userId });
-        }
-        
         await PopulateDisciplines(userId);
-        return View(assignment);
+
+        if (!ModelState.IsValid && !(await validationService.ValidateAsync(assignment)))
+            return View(assignment);
+
+        await repositoryService.CreateAsync(assignment);
+        return RedirectToAction(nameof(Index), new { userId });
     }
 
     [Route("{id}/edit")]
@@ -93,15 +92,6 @@ public class AssignmentController(IRepositoryService<Assignment> repositoryServi
         }
 
         await PopulateDisciplines(userId);
-        return View(assignment);
-    }
-
-    [Route("{id}/delete")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var assignment = await repositoryService.GetByIdAsync(id);
-        if (assignment is null) return NotFound();
-
         return View(assignment);
     }
 
