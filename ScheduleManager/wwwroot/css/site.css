@@ -92,16 +92,22 @@ body {
     display: inline-block;
     width: 100%;
     height: 100%;
-    padding: 10px;
     border-radius: 5px;
     text-decoration: none;
-    color: black;
     --bs-bg-opacity: .75;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
+    .lesson-block a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .lesson-block .lesson {
+        padding: 10px;
+    }
+
     .lesson-block:hover {
-        --bs-bg-opacity: 1;
         color: white;
     }
 
@@ -111,6 +117,17 @@ body {
     .lesson-block:hover span {
         --bs-bg-opacity: .75;
     }
+
+.menu {
+    display: none;
+    border-radius: 0 5px 5px 5px;
+    align-items: center;
+    align-content: center;
+}
+
+.lesson-block:hover .menu {
+    display: block;
+}
 
 .now {
     position: absolute;
@@ -140,18 +157,32 @@ body {
 .trow {
     height: 100%;
     cursor: pointer;
-    padding: 5px;
 }
 
     .trow a {
         text-decoration: none;
+        padding: 10px;
     }
 
     .trow:hover {
-        font-size: 105%;
-        box-shadow: rgba(17, 17, 26, 0.1) 0px 5px 5px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     }
 
 .table {
     margin-top: -5px;
+}
+
+.widget {
+    margin: 10px 20px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.widget-tr:hover {
+    cursor: pointer;
+    color: white;
+    background-color: var(--bs-secondary);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    --bs-bg-opacity: .1;
 }

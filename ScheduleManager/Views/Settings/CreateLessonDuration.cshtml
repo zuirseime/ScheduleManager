@@ -1,0 +1,32 @@
+﻿@using ScheduleManager.Data.Enums
+@model LessonDuration
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<form asp-action="CreateLessonDuration">
+    <input asp-for="UserId" class="form-control" hidden />
+
+    <div class="form-group">
+        <label asp-for="LessonType"></label>
+        <select class="form-control" name="LessonType">
+            <option value="">Choose a type</option>
+            @foreach (var type in Enum.GetValues(typeof(LessonType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+        <span asp-validation-for="LessonType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Duration"></label>
+        <input type="time" asp-for="Duration" class="form-control" />
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
+
+    <div class="form-group my-3">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>

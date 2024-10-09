@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data.Enums;
 using ScheduleManager.Data.Models;
 using ScheduleManager.Services;
@@ -14,16 +13,16 @@ public class AssignmentController(IRepositoryService<Assignment> repositoryServi
                                   IRepositoryService<Discipline> disciplineRepository) : Controller
 {
     [Route("{userId}")]
-    public async Task<IActionResult> Index(string? userId, AssignmentType? type = null, Guid? discipline = null, bool? done = null)
+    public async Task<IActionResult> Index(string? userId, AssignmentType? type = null, Guid? disciplineId = null, bool? done = null)
     {
         IEnumerable<Assignment> assignments;
 
-        if (userId is null) return NotFound();
+        if (userId is null || userId == (Guid.Empty.ToString())) return NotFound();
 
         assignments = await queryService.Filter(a => a.UserId == userId
-            && (!type.HasValue || a.Type == type)
-            && (!discipline.HasValue || a.DisciplineId == discipline)
-            && (!done.HasValue || a.IsDone == done.Value)
+            && (type is null || a.Type == type.Value)
+            && (disciplineId is null || disciplineId == Guid.Empty || a.DisciplineId == disciplineId.Value)
+            && (done is null || a.IsDone == done.Value)
         );
 
 
@@ -31,7 +30,7 @@ public class AssignmentController(IRepositoryService<Assignment> repositoryServi
 
         ViewBag.Amount = GetAssignmnetAmount(assignments);
         ViewBag.Type = type;
-        ViewBag.Discipline = discipline;
+        ViewBag.Discipline = disciplineId;
         ViewBag.Done = done;
         await PopulateDisciplines(userId);
 
@@ -58,14 +57,13 @@ public class AssignmentController(IRepositoryService<Assignment> repositoryServi
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(string userId, Assignment assignment)
     {
-        if (ModelState.IsValid && await validationService.ValidateAsync(assignment))
-        {
-            await repositoryService.CreateAsync(assignment);
-            return RedirectToAction(nameof(Index), new { userId });
-        }
-        
         await PopulateDisciplines(userId);
-        return View(assignment);
+
+        if (!ModelState.IsValid && !(await validationService.ValidateAsync(assignment)))
+            return View(assignment);
+
+        await repositoryService.CreateAsync(assignment);
+        return RedirectToAction(nameof(Index), new { userId });
     }
 
     [Route("{id}/edit")]
@@ -94,15 +92,6 @@ public class AssignmentController(IRepositoryService<Assignment> repositoryServi
         }
 
         await PopulateDisciplines(userId);
-        return View(assignment);
-    }
-
-    [Route("{id}/delete")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var assignment = await repositoryService.GetByIdAsync(id);
-        if (assignment is null) return NotFound();
-
         return View(assignment);
     }
 

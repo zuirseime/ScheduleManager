@@ -1,0 +1,57 @@
+﻿@model SettingsViewModel
+
+@{
+    ViewData["Title"] = "My Settings";
+}
+
+<div class="widget">
+    <div class="h2 text-center">Lesson Durations</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.LessonDurations)
+            {
+                <tr class="widget-tr" onclick="window.location='@Url.Action("EditLessonDuration", new { id = item.Id, userId = @ViewBag.UserId})';">
+                    <td>@item.LessonType </td>
+                    <td>@item.Duration</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary w-100" asp-action="CreateLessonDuration" asp-route-userId="@ViewBag.UserId">
+        <i class="fa-solid fa-plus"></i>
+    </a>
+</div>
+
+<div class="widget">
+    <div class="h2 text-center">Ring Schedule</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Rings)
+            {
+                <tr class="widget-tr" onclick="window.location='@Url.Action("EditRing", new { id = item.Id, userId = @ViewBag.UserId})';">
+                    <td>@item.Number</td>
+                    <td>@item.Time</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary w-100" asp-action="CreateRing" asp-route-userId="@ViewBag.UserId">
+        <i class="fa-solid fa-plus"></i>
+    </a>
+</div>

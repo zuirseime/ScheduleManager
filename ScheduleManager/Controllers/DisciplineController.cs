@@ -60,17 +60,6 @@ public class DisciplineController(IRepositoryService<Discipline> repositoryServi
         return View(discipline);
     }
 
-    [Route("{id}/delete")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var discipline = await repositoryService.GetByIdAsync(id);
-
-        if (discipline == null)
-            return NotFound();
-
-        return View(discipline);
-    }
-
     [HttpPost, ActionName("Delete")]
     [Route("{id}/delete")]
     [ValidateAntiForgeryToken]

@@ -3,7 +3,7 @@
 @model IEnumerable<ScheduleManager.Data.Models.Assignment>
 
 @{
-    ViewData["Title"] = "Tasks";
+    ViewData["Title"] = "My Assignments";
     float done = ViewBag.Amount.Item1;
     float all = ViewBag.Amount.Item2;
 }
@@ -24,15 +24,15 @@
                 <label for="typeFilter">Assignment type</label>
                 <select class="form-control" name="type" id="typeFilter" data-selected="@ViewBag.Type">
                     <option value="">Choose a type</option>
-                    <option value="@AssignmentType.Lab">Лабораторні</option>
-                    <option value="@AssignmentType.Module">Модулі</option>
-                    <option value="@AssignmentType.Calculation">Розрахункові</option>
-                    <option value="@AssignmentType.Practice">Практичні</option>
+                    @foreach (var type in Enum.GetValues(typeof(AssignmentType)))
+                    {
+                        <option value="@type">@(type)s</option>
+                    }
                 </select>
             </div>
             <div class="form-group my-2">
                 <label for="disciplineFilter">Discipline</label>
-                <select class="form-control" name="discipline" id="disciplineFilter" data-selected="@ViewBag.Discipline">
+                <select class="form-control" name="disciplineId" id="disciplineFilter" data-selected="@ViewBag.Discipline">
                     @foreach (Discipline discipline in ViewBag.Disciplines)
                     {
                         <option value="@discipline.Id">@discipline.Name</option>
@@ -63,9 +63,9 @@
     <button class="px-3 btn btn-primary align-bottom" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Filters</button>
 
     <div>
-        <div class="text-end">Виконано:</div>
-        <div class="text-end">Абсолютне значення: @done / @all</div>
-        <div class="text-end">Відносне значення: @(Math.Round(done / all * 100, 2))%</div>
+        <div class="text-end">Accomplished:</div>
+        <div class="text-end">Absolute value: @done / @all</div>
+        <div class="text-end">Relative value: @(Math.Round(done / all * 100, 2))%</div>
     </div>
 </div>
 
@@ -77,17 +77,17 @@
 
             if (assignment.IsDone)
             {
-                rowClass = "table-success";
+                rowClass = "bg-success";
             } else if (assignment.DueDate < DateOnly.FromDateTime(DateTime.Now))
             {
-                rowClass = "table-danger";
+                rowClass = "bg-danger";
             } else if (assignment.DueDate < DateOnly.FromDateTime(DateTime.Now.AddDays(14)))
             {
-                rowClass = "table-warning";
+                rowClass = "bg-warning";
             }
-            <tr class=" trow @rowClass">
-                <td>
-                    <a asp-action="Edit" asp-route-id="@assignment.Id" asp-route-userId="@ViewBag.UserId" class="d-flex justify-content-between">
+            <tr class="trow">
+                <td class="p-0">
+                    <a asp-action="Edit" asp-route-id="@assignment.Id" asp-route-userId="@ViewBag.UserId" class="@rowClass bg-opacity-25 d-flex justify-content-between">
                         <div>
                             <div class="text-dark mb-1">@Html.DisplayFor(modelItem => assignment.Title)</div>
 
