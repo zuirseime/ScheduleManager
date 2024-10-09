@@ -57,8 +57,15 @@
         <span asp-validation-for="DueDate" class="text-danger"></span>
     </div>
 
-    <div class="form-group my-3">
-        <input type="submit" value="Save" class="btn btn-primary" />
+    <div class="justify-content-end d-flex gap-2">
+        <form asp-action="Delete" asp-route-id="@Model.Id">
+            <div class="form-group my-3">
+                <input type="submit" value="Delete" class="btn btn-danger px-3" />
+            </div>
+        </form>
+        <div class="form-group my-3">
+            <input type="submit" value="Save" class="btn btn-primary px-5" />
+        </div>
     </div>
 </form>
 

@@ -8,33 +8,24 @@
     <i class="fa-solid fa-plus"></i>
 </a>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="widget">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td class="align-items-center">
-                    <div class="d-flex gap-2">
-                        <a asp-action="Edit" asp-route-id="@item.Id">
-                            <i class="fa-solid fa-pencil fa-xl text-primary"></i>
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">
-                            <i class="fa-solid fa-trash fa-xl text-danger"></i>
-                        </a>
-                    </div>
-                </td>
+                <th class="text-center">
+                    Disciplines
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="widget-tr" onclick="window.location='@Url.Action("Edit", new { id = item.Id, userId = @ViewBag.UserId})';">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,10 +1,8 @@
 ﻿@model ScheduleManager.Data.Models.Discipline
 
 @{
-    ViewData["Title"] = "Edit Discipline";
+    ViewData["Title"] = "Edit the Discipline";
 }
-
-<h2>@ViewData["Title"]</h2>
 
 <form asp-action="Edit">
 
@@ -14,12 +12,17 @@
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
+    <div class="justify-content-end d-flex gap-2">
+        <form asp-action="Delete" asp-route-id="@Model.Id">
+            <div class="form-group my-3">
+                <input type="submit" value="Delete" class="btn btn-danger px-3" />
+            </div>
+        </form>
+        <div class="form-group my-3">
+            <input type="submit" value="Save" class="btn btn-primary px-5" />
+        </div>
     </div>
 </form>
-
-<a asp-action="Index">Back to List</a>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
