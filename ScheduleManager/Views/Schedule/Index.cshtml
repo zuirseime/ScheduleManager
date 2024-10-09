@@ -1,0 +1,110 @@
+﻿@model ScheduleViewModel
+
+@{
+    ViewData["Title"] = $"My Schedule";
+}
+
+<a asp-action="Create" asp-route-day="@Model.Day" asp-route-userId="@ViewBag.UserId" class="btn btn-primary sticky-button">
+    <i class="fa-solid fa-plus"></i>
+</a>
+
+<div class="row mt-2">
+    <div class="d-flex justify-content-center gap-2">
+        <a asp-action="Index" asp-route-day="@(((byte)Model.Day + 6) % Model.WeekDuration)"
+           asp-route-userId="@ViewBag.UserId">
+            <i class="fa-solid fa-arrow-left fa-lg text-dark"></i>
+        </a>
+        <div class="h5 text-dark">@(Model.Day)</div>
+        <a asp-action="Index" asp-route-day="@(((byte)Model.Day + 1) % Model.WeekDuration)"
+           asp-route-userId="@ViewBag.UserId">
+            <i class="fa-solid fa-arrow-right fa-lg text-dark"></i>
+        </a>
+    </div>
+</div>
+
+<div class="schedule-container">
+    <div class="hours">
+        @for (var i = @Model.StartHour; i < Model.EndHour; i++)
+        {
+            <div class="hour-block">
+                <div class="small hour-text">@($"{i}:00") - @($"{i + 1}:00")</div>
+            </div>
+        }
+    </div>
+
+    @if (Model.Day == DateTime.Today.DayOfWeek)
+    {
+        <div class="now">
+            <div class="now-circle"></div>
+            <div class="now-line"></div>
+        </div>
+    }
+
+    <div class="lessons">
+        @foreach (var vm in Model.Lessons)
+        {
+            <div class="lesson-block-bg" style="@GetRect(vm.Start, vm.End)">
+                <div class="lesson-block bg-success d-flex justify-content-between">
+                    <div class="lesson">
+                        <a asp-action="Index" asp-controller="Assignment"
+                           asp-route-userId="@ViewBag.UserId"
+                           asp-route-discipline="@vm.Lesson.Discipline?.Id"
+                           asp-route-done="False"
+                           class="">
+                            <div><span class="badge bg-success p-2">@vm.Lesson.LessonType</span> @vm.Lesson.Discipline?.Name</div>
+                            <small>@vm.Start.ToString("HH:mm") - @vm.End.ToString("HH:mm")</small>
+                        </a>
+                    </div>
+                    <div class="p-3 align-content-center bg-success menu lesson">
+                        <a asp-action="Edit" asp-route-userId="@ViewBag.UserId" asp-route-id="@vm.Lesson.Id">
+                            <i class="fa-solid fa-pen-to-square fa-xl text-light"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@functions {
+    private string GetRect(TimeOnly start, TimeOnly end)
+    {
+        string offset = GetTopOffset(start);
+        double height = (end - start).TotalMinutes;
+        return $"{offset} height: {height}px;";
+    }
+
+    private string GetTopOffset(TimeOnly start)
+    {
+        var hoursFromStart = (start.ToTimeSpan() - new TimeSpan(Model.StartHour, 0, 0));
+        double topOffset = Math.Round(hoursFromStart.TotalMinutes);
+        return $"top: {topOffset}px;";
+    }
+}
+
+<script type="text/javascript">
+
+    function updateNowLinePosition() {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const minutesFromStart = now.getMinutes();
+
+        const topOffset = getTopOffset(hours, minutes);;
+
+        document.querySelector('.now').style.top = topOffset + 'px';
+    }
+
+    function getTopOffset(hours, minutes) {
+        const startHour = @Model.StartHour;
+        const pixelsPerMinute = 1;
+        const minutesFromStart = (hours - startHour) * 60 + minutes;
+        return minutesFromStart * pixelsPerMinute;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setInterval(updateNowLinePosition, 60000);
+        updateNowLinePosition();
+    });
+
+</script>
