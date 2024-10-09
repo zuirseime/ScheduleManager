@@ -2,5 +2,5 @@
 
 public enum LessonType : byte
 {
-    Lecture, Practice
+    Lecture, Practice, Seminar
 }
