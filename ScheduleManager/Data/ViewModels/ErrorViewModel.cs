@@ -1,4 +1,4 @@
-namespace ScheduleManager.Data.Models;
+namespace ScheduleManager.Data.ViewModels;
 
 public class ErrorViewModel
 {

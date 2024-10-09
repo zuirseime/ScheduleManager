@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ScheduleManager.Data.Models;
+using ScheduleManager.Data.ViewModels;
 using System.Diagnostics;
 
 namespace ScheduleManager.Controllers;
