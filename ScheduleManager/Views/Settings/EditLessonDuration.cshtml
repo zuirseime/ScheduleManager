@@ -1,0 +1,46 @@
+﻿@using ScheduleManager.Data.Enums
+
+@model LessonDuration
+
+<form asp-action="EditLessonDuration">
+    <input asp-for="UserId" class="form-control" hidden />
+
+    <div class="form-group">
+        <label asp-for="LessonType"></label>
+        <select class="form-control" name="LessonType" id="type" data-selected="@Model.LessonType">
+            <option value="">Choose a type</option>
+            @foreach (var type in Enum.GetValues(typeof(LessonType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+        <span asp-validation-for="LessonType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Duration"></label>
+        <input type="time" asp-for="Duration" class="form-control" />
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
+
+    <div class="d-flex gap-2">
+        <div class="form-group my-3">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+        <form asp-action="DeleteLessonDuration" asp-route-id="@Model.Id">
+            <div class="form-group my-3">
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </div>
+        </form>
+    </div>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const typeSelect = document.getElementById("type");
+        const selectedType = typeSelect.getAttribute("data-selected");
+        if (selectedType) {
+            typeSelect.value = selectedType;
+        }
+    });
+</script>
