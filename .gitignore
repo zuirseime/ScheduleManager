@@ -6,6 +6,9 @@
 # Migration files
 Migrations/
 
+launchSettings.json
+appsettings.json
+
 # User-specific files
 *.rsuser
 *.suo
