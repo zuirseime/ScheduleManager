@@ -32,7 +32,8 @@
         }
     </div>
 
-    @if (Model.Day == DateTime.Today.DayOfWeek)
+    @if (Model.Day == DateTime.Today.DayOfWeek 
+        && (DateTime.Now.Hour >= Model.StartHour && DateTime.Now.Hour < Model.EndHour))
     {
         <div class="now">
             <div class="now-circle"></div>
@@ -51,8 +52,11 @@
                            asp-route-discipline="@vm.Lesson.Discipline?.Id"
                            asp-route-done="False"
                            class="">
-                            <div><span class="badge bg-success p-2">@vm.Lesson.LessonType</span> @vm.Lesson.Discipline?.Name</div>
-                            <small>@vm.Start.ToString("HH:mm") - @vm.End.ToString("HH:mm")</small>
+                            <div class="d-inline-flex gap-2">
+                                <span class="badge bg-success p-2">@vm.Lesson.LessonType</span>
+                                <div>@vm.Lesson.Discipline?.Name</div>
+                            </div>
+                            <div class="small text-black-50">@vm.Lesson.Teacher</div>
                         </a>
                     </div>
                     <div class="p-3 align-content-center bg-success menu lesson">
