@@ -1,11 +1,9 @@
 ﻿@using ScheduleManager.Data.Enums
 
-@model IEnumerable<ScheduleManager.Data.Models.Assignment>
+@model AssignmentsViewModel
 
 @{
     ViewData["Title"] = "My Assignments";
-    float done = ViewBag.Amount.Item1;
-    float all = ViewBag.Amount.Item2;
 }
 
 <a asp-action="Create" asp-route-userId="@ViewBag.UserId" class="btn btn-primary sticky-button">
@@ -63,15 +61,15 @@
     <button class="px-3 btn btn-primary align-bottom" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Filters</button>
 
     <div>
-        <div class="text-end">Accomplished:</div>
-        <div class="text-end">Absolute value: @done / @all</div>
-        <div class="text-end">Relative value: @(Math.Round(done / all * 100, 2))%</div>
+        <div class="text-end mb-0 h5">Accomplished</div>
+        <div class="text-end">Absolute value: @Model.Done / @Model.Total</div>
+        <div class="text-end">Relative value: @Model.Progress %</div>
     </div>
 </div>
 
 <table class="table">
     <tbody>
-        @foreach (var assignment in Model)
+        @foreach (var assignment in Model.Assignments)
         {
             var rowClass = "";
 

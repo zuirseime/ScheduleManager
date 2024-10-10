@@ -71,20 +71,16 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
         if (string.IsNullOrEmpty(userId))
             return NotFound();
 
-        if (!ModelState.IsValid || !(await ringValidator.ValidateAsync(model)))
+        if (!ModelState.IsValid || !await ringValidator.ValidateAsync(model))
             return View(model);
 
         await ringRepository.CreateAsync(model);
         return RedirectToAction(nameof(Index), new { userId });
     }
 
-    [Route("{userId?}/edit-lesson-duration")]
-    public async Task<IActionResult> EditLessonDuration(string? userId, Guid id)
+    [Route("{id}/edit-lesson-duration")]
+    public async Task<IActionResult> EditLessonDuration(Guid id)
     {
-        if (string.IsNullOrEmpty(userId))
-            return NotFound();
-        ViewBag.UserId = userId;
-
         var lessonDuration = await lessonDurationRepository.GetByIdAsync(id);
         if (lessonDuration is null)
             return NotFound();
@@ -93,14 +89,10 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
     }
 
     [HttpPost]
-    [Route("{userId?}/edit-lesson-duration")]
+    [Route("{id}/edit-lesson-duration")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditLessonDuration(string? userId, Guid id, LessonDuration model)
+    public async Task<IActionResult> EditLessonDuration(string userId, Guid id, LessonDuration model)
     {
-        if (string.IsNullOrEmpty(userId))
-            return NotFound();
-        ViewBag.UserId = userId;
-
         if (id != model.Id)
             return NotFound();
 
@@ -111,8 +103,8 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
         return RedirectToAction(nameof(Index), new { userId });
     }
 
-    [Route("{userId?}/edit-ring")]
-    public async Task<IActionResult> EditRing(string? userId, Guid id)
+    [Route("{id}/edit-ring")]
+    public async Task<IActionResult> EditRing(string userId, Guid id)
     {
         if (string.IsNullOrEmpty(userId))
             return NotFound();
@@ -125,11 +117,11 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
     }
 
     [HttpPost]
-    [Route("{userId?}/edit-ring")]
+    [Route("{id}/edit-ring")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditRing(string? userId, Guid id, Ring model)
+    public async Task<IActionResult> EditRing(string userId, Guid id, Ring model)
     {
-        if (id != model.Id)
+        if (string.IsNullOrEmpty(userId) || id != model.Id)
             return NotFound();
 
         if (!ModelState.IsValid)
@@ -140,11 +132,12 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
     }
 
     [HttpPost]
-    [Route("{userId?}/delete-lesson-duration")]
+    [Route("{id}/delete-lesson-duration")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteLessonDuration(string? userId, Guid id, LessonDuration model)
+    public async Task<IActionResult> DeleteLessonDuration(string userId, Guid id)
     {
-        if (id != model.Id)
+        var model = await lessonDurationRepository.GetByIdAsync(id);
+        if (model is null)
             return NotFound();
 
         await lessonDurationRepository.DeleteAsync(model);
@@ -152,12 +145,16 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
     }
 
     [HttpPost]
-    [Route("{userId?}/delete-ring")]
+    [Route("{id}/delete-ring")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteRing(string? userId, Guid id, Ring model)
+    public async Task<IActionResult> DeleteRing(string userId, Guid id)
     {
-        if (id != model.Id)
+        var model = await ringRepository.GetByIdAsync(id);
+        if (model is null)
             return NotFound();
+
+        if (!ModelState.IsValid)
+            return View(new { userId, id });
 
         await ringRepository.DeleteAsync(model);
         return RedirectToAction(nameof(Index), new { userId });

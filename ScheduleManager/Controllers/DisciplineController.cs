@@ -5,8 +5,7 @@ using ScheduleManager.Services;
 namespace ScheduleManager.Controllers;
 
 [Route("disciplines/")]
-public class DisciplineController(IRepositoryService<Discipline> repositoryService, 
-                                  IQueryService<Discipline> queryService,
+public class DisciplineController(IRepositoryService<Discipline> repositoryService,
                                   IValidationService<Discipline> validationService) : Controller
 {
     [Route("{userId}")]
@@ -27,20 +26,19 @@ public class DisciplineController(IRepositoryService<Discipline> repositoryServi
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(string userId, Discipline discipline)
     {
-        if (ModelState.IsValid && await validationService.ValidateAsync(discipline))
-        {
-            await repositoryService.CreateAsync(discipline);
-            return RedirectToAction(nameof(Index), new { userId });
-        }
-        return View(discipline);
+        if (!ModelState.IsValid || !await validationService.ValidateAsync(discipline))
+            return View(discipline);
+
+        await repositoryService.CreateAsync(discipline);
+        return RedirectToAction(nameof(Index), new { userId });
     }
 
     [Route("{id}/edit")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var discipline = await repositoryService.GetByIdAsync(id);
-        if (discipline == null)
-            return NotFound();
+        if (discipline is null) return NotFound();
+
         return View(discipline);
     }
 
@@ -52,25 +50,26 @@ public class DisciplineController(IRepositoryService<Discipline> repositoryServi
         if (id != discipline.Id)
             return NotFound();
 
-        if (ModelState.IsValid)
-        {
-            await repositoryService.UpdateAsync(discipline);
-            return RedirectToAction(nameof(Index), new { userId });
-        }
-        return View(discipline);
+        if (!ModelState.IsValid)
+            return View(discipline);
+        
+        await repositoryService.UpdateAsync(discipline);
+        return RedirectToAction(nameof(Index), new { userId });
     }
 
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
     [Route("{id}/delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(Guid id)
+    public async Task<IActionResult> Delete(string userId, Guid id)
     {
         var discipline = await repositoryService.GetByIdAsync(id);
-
         if (discipline == null)
             return NotFound();
 
+        if (!ModelState.IsValid)
+            return View(new { userId, id });
+
         await repositoryService.DeleteAsync(discipline);
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { userId });
     }
 }
