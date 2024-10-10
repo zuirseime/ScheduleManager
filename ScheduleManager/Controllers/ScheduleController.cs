@@ -49,8 +49,8 @@ public class ScheduleController(IRepositoryService<Lesson> lessonRepository,
         return View(scheduleVM);
     }
 
-    [Route("create/{day}/{userId?}")]
-    public async Task<IActionResult> Create(DayOfWeek day, string? userId)
+    [Route("{day}/{userId}/create")]
+    public async Task<IActionResult> Create(DayOfWeek day, string userId)
     {
         if (string.IsNullOrEmpty(userId))
             return NotFound();
@@ -63,9 +63,9 @@ public class ScheduleController(IRepositoryService<Lesson> lessonRepository,
     }
 
     [HttpPost]
-    [Route("create/{day}/{userId?}")]
+    [Route("{day}/{userId}/create")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(DayOfWeek day, string? userId, Lesson lesson)
+    public async Task<IActionResult> Create(DayOfWeek day, string userId, Lesson lesson)
     {
         if (string.IsNullOrEmpty(userId))
             return NotFound();
@@ -73,15 +73,15 @@ public class ScheduleController(IRepositoryService<Lesson> lessonRepository,
         await PopulateDisciplines(userId);
         await PopulateClasses(userId);
 
-        if (ModelState.IsValid && !(await lessonValidator.ValidateAsync(lesson)))
+        if (!ModelState.IsValid || !(await lessonValidator.ValidateAsync(lesson)))
             return View(lesson);
 
         await lessonRepository.CreateAsync(lesson);
         return RedirectToAction(nameof(Index), new { day, userId });
     }
 
-    [Route("{userId}/{id}/edit")]
-    public async Task<IActionResult> Edit(string? userId, Guid id)
+    [Route("{id}/edit")]
+    public async Task<IActionResult> Edit(string userId, Guid id)
     {
         if (string.IsNullOrEmpty(userId))
             return NotFound();
@@ -96,9 +96,9 @@ public class ScheduleController(IRepositoryService<Lesson> lessonRepository,
     }
 
     [HttpPost]
-    [Route("{userId}/{id}/edit")]
+    [Route("{id}/edit")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string? userId, Guid id, Lesson lesson)
+    public async Task<IActionResult> Edit(string userId, Guid id, Lesson lesson)
     {
         if (string.IsNullOrEmpty(userId))
             return NotFound();
@@ -117,14 +117,16 @@ public class ScheduleController(IRepositoryService<Lesson> lessonRepository,
         return View(lesson);
     }
 
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
     [Route("{id}/delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string userId, Guid id)
+    public async Task<IActionResult> Delete(string userId, Guid id)
     {
         var lesson = await lessonRepository.GetByIdAsync(id);
-        if (lesson is null)
-            return NotFound();
+        if (lesson is null) return NotFound();
+
+        if (!ModelState.IsValid)
+            return View(new { userId, id });
 
         await lessonRepository.DeleteAsync(lesson);
         return RedirectToAction(nameof(Index), new { lesson.Day, userId });

@@ -4,10 +4,6 @@
     ViewData["Title"] = "My Disciplines";
 }
 
-<a asp-action="Create" asp-route-userId="@ViewBag.UserId" class="btn btn-primary sticky-button">
-    <i class="fa-solid fa-plus"></i>
-</a>
-
 <div class="widget">
     <table class="table">
         <thead>
@@ -28,4 +24,8 @@
             }
         </tbody>
     </table>
+
+    <a asp-action="Create" asp-route-userId="@ViewBag.UserId" class="btn btn-primary w-100">
+        <i class="fa-solid fa-plus"></i>
+    </a>
 </div>
