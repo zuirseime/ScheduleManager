@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 using System.Security.Claims;
 
 namespace ScheduleManager.Data.Repositories;

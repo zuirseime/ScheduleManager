@@ -41,7 +41,7 @@ public class ScheduleController(IRepositoryService<Lesson> lessonRepository,
         {
             Day = day,
             StartHour = 6,
-            EndHour = 18,
+            EndHour = 16,
             Lessons = lessonVMs
         };
 

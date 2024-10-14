@@ -10,12 +10,12 @@
 
 <div class="row mt-2">
     <div class="d-flex justify-content-center gap-2">
-        <a asp-action="Index" asp-route-day="@(((byte)Model.Day + 6) % Model.WeekDuration)"
+        <a asp-action="Index" asp-route-day="@((DayOfWeek)(((byte)Model.Day + 6) % Model.WeekDuration))"
            asp-route-userId="@ViewBag.UserId">
             <i class="fa-solid fa-arrow-left fa-lg text-dark"></i>
         </a>
         <div class="h5 text-dark">@(Model.Day)</div>
-        <a asp-action="Index" asp-route-day="@(((byte)Model.Day + 1) % Model.WeekDuration)"
+        <a asp-action="Index" asp-route-day="@((DayOfWeek)(((byte)Model.Day + 1) % Model.WeekDuration))"
            asp-route-userId="@ViewBag.UserId">
             <i class="fa-solid fa-arrow-right fa-lg text-dark"></i>
         </a>
@@ -45,22 +45,22 @@
         @foreach (var vm in Model.Lessons)
         {
             <div class="lesson-block-bg" style="@GetRect(vm.Start, vm.End)">
-                <div class="lesson-block bg-success d-flex justify-content-between">
-                    <div class="lesson">
+                <div class="lesson-block bg-success d-flex align-content-between">
+                    <div class="lesson w-100">
                         <a asp-action="Index" asp-controller="Assignment"
-                           asp-route-userId="@ViewBag.UserId"
-                           asp-route-disciplineId="@vm.Lesson.Discipline?.Id"
-                           asp-route-done="False"
-                           class="">
+                            asp-route-userId="@ViewBag.UserId"
+                            asp-route-disciplineId="@vm.Lesson.Discipline?.Id"
+                            asp-route-done="False"
+                           class="d-block p-2 h-100">
                             <div class="d-inline-flex gap-2">
                                 <span class="badge bg-success p-2">@vm.Lesson.LessonType</span>
-                                <div>@vm.Lesson.Discipline?.Name</div>
+                                <div class="text-dark">@vm.Lesson.Discipline?.Name</div>
                             </div>
                             <div class="small text-black-50">@vm.Lesson.Teacher</div>
                         </a>
                     </div>
-                    <div class="p-3 align-content-center bg-success menu lesson">
-                        <a asp-action="Edit" asp-route-userId="@ViewBag.UserId" asp-route-id="@vm.Lesson.Id">
+                    <div class="bg-success lesson menu">
+                        <a asp-action="Edit" asp-route-userId="@ViewBag.UserId" asp-route-id="@vm.Lesson.Id" class="d-block h-100 align-content-center p-4">
                             <i class="fa-solid fa-pen-to-square fa-xl text-light"></i>
                         </a>
                     </div>

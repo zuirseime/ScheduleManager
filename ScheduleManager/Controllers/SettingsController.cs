@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ScheduleManager.Data.Enums;
 using ScheduleManager.Data.Models;
 using ScheduleManager.Data.ViewModels;
 using ScheduleManager.Services;
@@ -30,6 +31,7 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
         return View(viewModel);
     }
 
+#region Lesson Duration
     [Route("{userId?}/create-lesson-duration")]
     public IActionResult CreateLessonDuration(string? userId)
     {
@@ -53,6 +55,47 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
         return RedirectToAction(nameof(Index), new { userId });
     }
 
+
+    [Route("{id}/edit-lesson-duration")]
+    public async Task<IActionResult> EditLessonDuration(Guid id)
+    {
+        var lessonDuration = await lessonDurationRepository.GetByIdAsync(id);
+        if (lessonDuration is null)
+            return NotFound();
+
+        return View(lessonDuration);
+    }
+
+    [HttpPost]
+    [Route("{id}/edit-lesson-duration")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmEditLessonDuration(string userId, Guid id, LessonDuration model)
+    {
+        if (id != model.Id)
+            return NotFound();
+
+        if (!ModelState.IsValid)
+            return View(model);
+
+        await lessonDurationRepository.UpdateAsync(model);
+        return RedirectToAction(nameof(Index), new { userId });
+    }
+
+    [HttpPost]
+    [Route("{id}/delete-lesson-duration")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteLessonDuration(string userId, Guid id)
+    {
+        var model = await lessonDurationRepository.GetByIdAsync(id);
+        if (model is null)
+            return NotFound();
+
+        await lessonDurationRepository.DeleteAsync(model);
+        return RedirectToAction(nameof(Index), new { userId });
+    }
+#endregion
+
+#region Ring
     [Route("{userId?}/create-ring")]
     public IActionResult CreateRing(string? userId)
     {
@@ -78,31 +121,6 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
         return RedirectToAction(nameof(Index), new { userId });
     }
 
-    [Route("{id}/edit-lesson-duration")]
-    public async Task<IActionResult> EditLessonDuration(Guid id)
-    {
-        var lessonDuration = await lessonDurationRepository.GetByIdAsync(id);
-        if (lessonDuration is null)
-            return NotFound();
-
-        return View(lessonDuration);
-    }
-
-    [HttpPost]
-    [Route("{id}/edit-lesson-duration")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditLessonDuration(string userId, Guid id, LessonDuration model)
-    {
-        if (id != model.Id)
-            return NotFound();
-
-        if (!ModelState.IsValid)
-            return View(model);
-
-        await lessonDurationRepository.UpdateAsync(model);
-        return RedirectToAction(nameof(Index), new { userId });
-    }
-
     [Route("{id}/edit-ring")]
     public async Task<IActionResult> EditRing(string userId, Guid id)
     {
@@ -119,7 +137,7 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
     [HttpPost]
     [Route("{id}/edit-ring")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditRing(string userId, Guid id, Ring model)
+    public async Task<IActionResult> ConfirmEditRing(string userId, Guid id, Ring model)
     {
         if (string.IsNullOrEmpty(userId) || id != model.Id)
             return NotFound();
@@ -128,19 +146,6 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
             return View(model);
 
         await ringRepository.UpdateAsync(model);
-        return RedirectToAction(nameof(Index), new { userId });
-    }
-
-    [HttpPost]
-    [Route("{id}/delete-lesson-duration")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteLessonDuration(string userId, Guid id)
-    {
-        var model = await lessonDurationRepository.GetByIdAsync(id);
-        if (model is null)
-            return NotFound();
-
-        await lessonDurationRepository.DeleteAsync(model);
         return RedirectToAction(nameof(Index), new { userId });
     }
 
@@ -159,4 +164,5 @@ public class SettingsController(IRepositoryService<Ring> ringRepository,
         await ringRepository.DeleteAsync(model);
         return RedirectToAction(nameof(Index), new { userId });
     }
+#endregion
 }

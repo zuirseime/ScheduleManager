@@ -20,7 +20,10 @@ public class RepositoryService<T>(Repository<T> repository) : IRepositoryService
 
         foreach (var property in typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public))
         {
-            if (property.Name == nameof(Entity.Id))
+            if (property.Name == nameof(Entity.Id) || 
+                property.Name == nameof(Entity.UserId) || 
+                property.Name == nameof(Entity.User) ||
+                property.PropertyType.IsSubclassOf(typeof(Entity)))
                 continue;
 
             if (!property.CanWrite) continue;
