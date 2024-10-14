@@ -1,8 +1,10 @@
-﻿namespace ScheduleManager.Services;
+﻿using ScheduleManager.Data.Models;
 
-public interface IQueryService<T> where T : class
+namespace ScheduleManager.Services;
+
+public interface IQueryService<T> where T : Entity
 {
-    public void Sort(IEnumerable<T> values);
-    public Task<IEnumerable<T>> Filter(Func<T, bool> predicate);
-    public Task<IEnumerable<T>> Find(string query);
+    public IEnumerable<T> Sort(IEnumerable<T> values, params string[] properties);
+    public IEnumerable<T> Filter(IEnumerable<T> values, Func<T, bool> predicate);
+    public IEnumerable<T> Find(IEnumerable<T> values, string query);
 }
