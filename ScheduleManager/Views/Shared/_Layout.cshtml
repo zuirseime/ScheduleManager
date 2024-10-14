@@ -20,10 +20,15 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
 
-                <a class="navbar-brand" asp-area="" asp-controller="Schedule" asp-action="Index" asp-route-day="@DateTime.Today.DayOfWeek" asp-route-userId="@currentUser?.Id">Schedule</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Schedule" asp-action="Index" asp-route-day="@DateTime.Today.DayOfWeek" asp-route-userId="@currentUser?.Id">
+                    <div class="d-flex gap-2 align-content-center">
+                        <img src="/Schedule-icon.png" height="36" width="36" />
+                        <div class="align-content-center">Schedule</div>
+                    </div>
+                </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +50,7 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="dropdown">
-                                <a class="nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">@currentUser?.UserName</a>
+                                <a class="nav-link" role="button" data-bs-toggle="dropdown" aria-expanded="false">@currentUser?.UserName</a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
                                         <a class="nav-item dropdown-item" asp-controller="Account" asp-action="Index">My Profile</a>
@@ -75,7 +80,8 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

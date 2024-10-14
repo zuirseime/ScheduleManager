@@ -4,28 +4,30 @@
     ViewData["Title"] = "My Disciplines";
 }
 
-<div class="widget">
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="text-center">
-                    Disciplines
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="widget-tr" onclick="window.location='@Url.Action("Edit", new { id = item.Id, userId = @ViewBag.UserId})';">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
+<div class="container">
+    <div class="widget">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Disciplines
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="widget-tr" onclick="window.location='@Url.Action("Edit", new { id = item.Id, userId = @ViewBag.UserId})';">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-    <a asp-action="Create" asp-route-userId="@ViewBag.UserId" class="btn btn-primary w-100">
-        <i class="fa-solid fa-plus"></i>
-    </a>
+        <a asp-action="Create" asp-route-userId="@ViewBag.UserId" class="btn btn-primary w-100">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
 </div>

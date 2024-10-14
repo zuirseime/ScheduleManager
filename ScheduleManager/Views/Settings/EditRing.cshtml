@@ -1,36 +1,38 @@
-﻿@model Ring
+﻿@using ScheduleManager.Controllers
+@using ScheduleManager.Data.Enums
+@model Ring
 
 @{
     ViewData["Title"] = "Edit the Ring";
 }
 
-<form asp-action="">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="container">
+    <form asp-action="" class="widget">
+        <div class="h4 text-center mb-3">@ViewData["Title"]</div>
 
-    <input asp-for="UserId" hidden />
-    <input asp-for="Id" hidden />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="form-group">
-        <label asp-for="Number"></label>
-        <input asp-for="Number" type="number" class="form-control" />
-        <span asp-validation-for="Number" class="text-danger"></span>
-    </div>
+        <input asp-for="UserId" hidden />
+        <input asp-for="Id" hidden />
 
-    <div class="form-group">
-        <label asp-for="Time"></label>
-        <input type="time" asp-for="Time" class="form-control" />
-        <span asp-validation-for="Time" class="text-danger"></span>
-    </div>
-
-    <div class="justify-content-end d-flex gap-2">
-        <div class="form-group my-3">
-            <input type="submit" value="Delete" formaction="delete-ring" class="btn btn-danger px-3" />
+        <div class="my-2">
+            <label asp-for="Number"></label>
+            <input asp-for="Number" type="number" class="form-control" />
+            <span asp-validation-for="Number" class="text-danger"></span>
         </div>
-        <div class="form-group my-3">
+
+        <div class="my-2">
+            <label asp-for="Time"></label>
+            <input type="time" asp-for="Time" class="form-control" />
+            <span asp-validation-for="Time" class="text-danger"></span>
+        </div>
+
+        <div class="justify-content-end d-flex gap-2 mt-3">
+            <input type="submit" value="Delete" formaction="delete-ring" class="btn btn-danger px-3" />
             <input type="submit" value="Save" formaction="edit-ring" class="btn btn-primary px-5" />
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 @section Scripts {
     @{
