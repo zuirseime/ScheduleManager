@@ -6,7 +6,7 @@ namespace ScheduleManager.Data.Repositories;
 public class LessonDurationRepository(ScheduleContext context) : Repository<LessonDuration>(context)
 {
     public override async Task<IEnumerable<LessonDuration>> GetAllAsync()
-        => await context.LessonDurations.ToListAsync();
+        => await context.LessonDurations.Include(e => e.User).ToListAsync();
 
     public override async Task<LessonDuration?> GetByIdAsync(Guid id)
         => (await GetAllAsync()).FirstOrDefault(a => a.Id == id);

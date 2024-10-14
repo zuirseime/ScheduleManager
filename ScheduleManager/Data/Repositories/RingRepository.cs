@@ -6,10 +6,10 @@ namespace ScheduleManager.Data.Repositories;
 public class RingRepository(ScheduleContext context) : Repository<Ring>(context)
 {
     public override async Task<IEnumerable<Ring>> GetAllAsync()
-        => await context.Rings.ToListAsync();
+        => await context.Rings.Include(e => e.User).ToListAsync();
 
     public override async Task<Ring?> GetByIdAsync(Guid id)
-        => (await GetAllAsync()).FirstOrDefault(a => a.Id == id);
+        => (await GetAllAsync()).FirstOrDefault(e => e.Id == id);
 
     public override async Task CreateAsync(Ring entity)
     {

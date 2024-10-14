@@ -7,7 +7,7 @@ public class ScheduleViewModel
     public IEnumerable<LessonViewModel> Lessons { get; set; } = [];
 
     public DayOfWeek Day { get; set; } = DateTime.Today.DayOfWeek;
-    public byte WeekDuration => (byte)Enum.GetValues(typeof(DayOfWeek)).Length;
+    public byte WeekDuration => (byte)(Enum.GetValues(typeof(DayOfWeek)).Length);
 
     public byte StartHour { get; set; }
     public byte EndHour { get; set; }

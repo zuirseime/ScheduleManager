@@ -16,24 +16,27 @@ public class AssignmentController(IRepositoryService<Assignment> repositoryServi
     [Route("{userId}")]
     public async Task<IActionResult> Index(string? userId, AssignmentType? type = null, Guid? disciplineId = null, bool? done = null)
     {
-        IEnumerable<Assignment> assignments;
+        IEnumerable<Assignment> assignments = await repositoryService.GetAllAsync();
 
         if (userId is null || userId == (Guid.Empty.ToString())) return NotFound();
 
-        assignments = await queryService.Filter(a => a.UserId == userId
+        assignments = queryService.Filter(assignments, a => a.UserId == userId
             && (type is null || a.Type == type.Value)
             && (disciplineId is null || disciplineId == Guid.Empty || a.DisciplineId == disciplineId.Value)
             && (done is null || a.IsDone == done.Value)
         );
-
-        queryService.Sort(assignments);
 
         ViewBag.Type = type;
         ViewBag.Discipline = disciplineId;
         ViewBag.Done = done;
         await PopulateDisciplines(userId);
 
-        return View(new AssignmentsViewModel { Assignments = assignments });
+        return View(new AssignmentsViewModel { 
+            Assignments = queryService.Sort(assignments, 
+                                            nameof(Assignment.DueDate), 
+                                            nameof(Assignment.DisciplineId), 
+                                            nameof(Assignment.Title))
+        });
     }
 
     [Route("{userId}/create")]
